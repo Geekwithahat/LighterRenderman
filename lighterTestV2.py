@@ -179,7 +179,7 @@ ri.Rotate(0,1,0,0)
 ri.Cylinder(1, -0.5, 0.5, 360)
 ri.TransformEnd()
 
-# left nub???
+# right nub???
 ri.TransformBegin()
 ri.Translate(1.2, 0.3, 0.6)
 ri.Scale(0.3,0.3,0.1)
@@ -187,30 +187,43 @@ ri.Rotate(0,1,0,0)
 ri.Sphere(1, -0.5, 0.5, 360)
 ri.TransformEnd()
 
+# right nub???
+ri.TransformBegin()
+ri.Translate(1.2, 0.3, 0.65)
+ri.Scale(0.3,0.3,0.15)
+ri.Rotate(0,1,0,0)
+ri.Sphere(1, -0.5, 0.5, 360)
+ri.TransformEnd()
+
+
 
 #------------------
 # LIGHTER TOP
 #-----------------
 
+# grate
 ri.TransformBegin()
 ri.Translate(0, -1, 0.7)
 ri.Scale(0.9,0.9,0.3)
 ri.Cylinder(1, -0.5, 0.5, 360)
 ri.TransformEnd()
 
+# rim
 ri.TransformBegin()
 ri.Translate(0, -1, 0.8)
 ri.Scale(1,1,0.05)
 ri.Cylinder(1, -0.5, 0.5, 360)
 ri.TransformEnd()
 
+# hinge bar
 ri.TransformBegin()
 ri.Translate(0, -1, 0.75)
-ri.Scale(3.5,0.04,0.04)
+ri.Scale(3.3,0.04,0.04)
 ri.Rotate(90,0,1,0)
 ri.Cylinder(1, -0.5, 0.5, 360)
 ri.TransformEnd()
 
+# hinge bar end
 ri.TransformBegin()
 ri.Translate(-1.8, -1.0, 0.75)
 ri.Scale(0.3,0.25,0.05)
