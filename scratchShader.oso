@@ -1,0 +1,186 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.13.0.@PROJECT_VERSION_TWEAK@"dev"
+# options: 
+shader scratchShader
+oparam	color	resultRGB	0 0 0		%read{2147483647,-1} %write{1,65}
+oparam	float	resultA	0		%read{2147483647,-1} %write{2,65}
+global	point	P	%read{48,50} %write{2147483647,-1}
+local	float[120]	ps	%read{7,65} %write{0,0}
+local	float	dist	%read{7,65} %write{3,65}
+local	float	thickness	%read{7,65} %write{4,4}
+local	int	___345_c	%read{7,65} %write{6,65}
+local	float	___347_i	%read{7,65} %write{7,65}
+local	float	___348_bezierU	%read{7,65} %write{7,65}
+local	float	___348_bezierV	%read{7,65} %write{7,65}
+local	float	___348_diffU	%read{7,65} %write{7,65}
+local	float	___348_diffV	%read{7,65} %write{7,65}
+local	float	___348_newDist	%read{7,65} %write{7,65}
+const	float[120]	$const1	-3.20251608 -0.101258062 -3.20251608 -4.47488785 -0.737444043 -4.47488785 0.269245744 0.634622872 0.269245744 -4.08904648 -0.54452318 -2.08904648 -1.51502526 -0.257512629 -1.51502526 -0.343147099 1.32842648 1.65685296 -3.77055264 -0.385276258 -3.77055264 0.183111668 1.59155583 2.18311167 0.0674175844 0.533708811 0.0674175844 1.68152452 2.34076238 1.68152452 -2.26433086 0.367834598 -2.26433086 1.65658259 2.32829118 1.65658259 -4.18722153 -0.593610644 -2.18722129 3.46909666 2.23454833 1.46909666 3.72352529 2.36176252 3.72352529 -4.60878849 -0.804394126 -2.60878825 4.2774086 2.6387043 2.2774086 4.52370453 2.76185226 4.52370453 0.926510394 1.96325517 0.926510394 -2.40430593 0.297846973 -0.404306024 0.407147586 1.70357382 0.407147586 -1.21463144 -0.107315704 -3.21463132 -4.34847403 -0.674236953 -4.34847403 -2.13137794 -0.565688968 -4.1313777 0.435447603 0.717723787 -1.56455243 -2.20240879 0.398795545 -2.20240879 2.21349692 1.60674846 0.213496998 -3.41017151 -0.205085799 -1.41017163 -0.665554523 1.16722274 1.33444548 3.49129176 2.245646 1.49129176 -2.28099656 -0.64049834 -4.2809968 0.163579181 1.58178961 2.16357923 -1.31481397 -0.157406956 -3.31481385 3.74973249 2.37486625 3.74973249 4.99568892 2.99784446 4.99568892 -1.03222179 0.983889103 -1.03222179 1.39387524 1.19693768 1.39387524 -3.043221 -0.0216105338 -1.04322112 3.8218801 2.41094017 3.8218801 1.23530746 1.11765373 -0.764692545 		%read{0,0} %write{2147483647,-1}
+const	color	$const2	0 0 0		%read{1,1} %write{2147483647,-1}
+const	float	$const3	0		%read{2,2} %write{2147483647,-1}
+const	int	$const4	1		%read{3,50} %write{2147483647,-1}
+const	float	$const5	0.00300000003		%read{4,4} %write{2147483647,-1}
+const	int	$const6	0		%read{6,48} %write{2147483647,-1}
+const	int	$const7	120		%read{7,7} %write{2147483647,-1}
+temp	int	$tmp1	%read{7,65} %write{7,65}
+temp	int	$tmp2	%read{5,65} %write{6,65}
+temp	int	$tmp3	%read{7,65} %write{7,65}
+temp	int	$tmp4	%read{7,65} %write{7,65}
+const	float	$const8	1		%read{13,64} %write{2147483647,-1}
+temp	float	$tmp5	%read{7,65} %write{7,65}
+temp	float	$tmp6	%read{7,65} %write{7,65}
+temp	float	$tmp7	%read{7,65} %write{7,65}
+temp	float	$tmp8	%read{7,65} %write{7,65}
+temp	float	$tmp9	%read{7,65} %write{7,65}
+const	float	$const9	2		%read{19,37} %write{2147483647,-1}
+temp	float	$tmp10	%read{7,65} %write{7,65}
+temp	float	$tmp11	%read{7,65} %write{7,65}
+temp	float	$tmp12	%read{7,65} %write{7,65}
+const	int	$const10	2		%read{21,21} %write{2147483647,-1}
+temp	int	$tmp13	%read{7,65} %write{7,65}
+temp	float	$tmp14	%read{7,65} %write{7,65}
+temp	float	$tmp15	%read{7,65} %write{7,65}
+temp	float	$tmp16	%read{7,65} %write{7,65}
+temp	float	$tmp17	%read{7,65} %write{7,65}
+const	int	$const11	4		%read{26,26} %write{2147483647,-1}
+temp	int	$tmp18	%read{7,65} %write{7,65}
+temp	float	$tmp19	%read{7,65} %write{7,65}
+temp	float	$tmp20	%read{7,65} %write{7,65}
+temp	float	$tmp21	%read{7,65} %write{7,65}
+temp	float	$tmp22	%read{7,65} %write{7,65}
+temp	float	$tmp23	%read{7,65} %write{7,65}
+temp	int	$tmp24	%read{7,65} %write{7,65}
+temp	float	$tmp25	%read{7,65} %write{7,65}
+temp	float	$tmp26	%read{7,65} %write{7,65}
+temp	float	$tmp27	%read{7,65} %write{7,65}
+temp	float	$tmp28	%read{7,65} %write{7,65}
+temp	float	$tmp29	%read{7,65} %write{7,65}
+const	int	$const12	3		%read{39,39} %write{2147483647,-1}
+temp	int	$tmp30	%read{7,65} %write{7,65}
+temp	float	$tmp31	%read{7,65} %write{7,65}
+temp	float	$tmp32	%read{7,65} %write{7,65}
+temp	float	$tmp33	%read{7,65} %write{7,65}
+temp	float	$tmp34	%read{7,65} %write{7,65}
+const	int	$const13	5		%read{44,44} %write{2147483647,-1}
+temp	int	$tmp35	%read{7,65} %write{7,65}
+temp	float	$tmp36	%read{7,65} %write{7,65}
+temp	float	$tmp37	%read{7,65} %write{7,65}
+temp	float	$tmp38	%read{7,65} %write{7,65}
+temp	float	$tmp39	%read{7,65} %write{7,65}
+const	string	$const14	"hypot"		%read{52,52} %write{2147483647,-1}
+temp	float	$tmp40	%read{7,65} %write{7,65}
+temp	float	$tmp41	%read{7,65} %write{7,65}
+temp	float	$tmp42	%read{7,65} %write{7,65}
+temp	int	$tmp43	%read{7,65} %write{7,65}
+const	float	$const15	0.00100000005		%read{60,60} %write{2147483647,-1}
+temp	int	$tmp44	%read{7,65} %write{7,65}
+const	color	$const16	0.100000001 0.100000001 0.100000001		%read{63,63} %write{2147483647,-1}
+const	int	$const17	6		%read{65,65} %write{2147483647,-1}
+code ___main___
+# scratchShader.osl:5
+# float ps[120] = {-3.2025161252581844, -0.1012580626290922, -3.2025161252581844, -4.474888061398373, -0.7374440306991863, 
+	assign		ps $const1 	%filename{"scratchShader.osl"} %line{5} %argrw{"wr"}
+# scratchShader.osl:31
+# resultRGB=color(0,0,0);
+	assign		resultRGB $const2 	%line{31} %argrw{"wr"}
+# scratchShader.osl:32
+# resultA=0.0;
+	assign		resultA $const3 	%line{32} %argrw{"wr"}
+# scratchShader.osl:34
+# float dist = 1;
+	assign		dist $const4 	%line{34} %argrw{"wr"}
+# scratchShader.osl:35
+# float thickness = 0.003;
+	assign		thickness $const5 	%line{35} %argrw{"wr"}
+# scratchShader.osl:37
+# for(int c=0; c<120; c+=6)
+	for		$tmp2 7 9 65 66 	%line{37} %argrw{"r"}
+	assign		___345_c $const6 	%argrw{"wr"}
+	lt		$tmp1 ___345_c $const7 	%argrw{"wrr"}
+	neq		$tmp2 $tmp1 $const6 	%argrw{"wrr"}
+# scratchShader.osl:39
+#     for (float i = 0;  i < 1;  i += 0.001) {
+	for		$tmp4 11 13 60 61 	%line{39} %argrw{"r"}
+	assign		___347_i $const6 	%argrw{"wr"}
+	lt		$tmp3 ___347_i $const4 	%argrw{"wrr"}
+	neq		$tmp4 $tmp3 $const6 	%argrw{"wrr"}
+# scratchShader.osl:40
+#         float bezierU = (1.0 - i) * (1.0 - i) * ps[c] + 2.0 * (1.0 - i) * i * ps[c+2] + i * i * ps[c+4];
+	sub		$tmp5 $const8 ___347_i 	%line{40} %argrw{"wrr"}
+	sub		$tmp6 $const8 ___347_i 	%argrw{"wrr"}
+	mul		$tmp7 $tmp5 $tmp6 	%argrw{"wrr"}
+	aref		$tmp8 ps ___345_c 	%argrw{"wrr"}
+	mul		$tmp9 $tmp7 $tmp8 	%argrw{"wrr"}
+	sub		$tmp10 $const8 ___347_i 	%argrw{"wrr"}
+	mul		$tmp11 $const9 $tmp10 	%argrw{"wrr"}
+	mul		$tmp12 $tmp11 ___347_i 	%argrw{"wrr"}
+	add		$tmp13 ___345_c $const10 	%argrw{"wrr"}
+	aref		$tmp14 ps $tmp13 	%argrw{"wrr"}
+	mul		$tmp15 $tmp12 $tmp14 	%argrw{"wrr"}
+	add		$tmp16 $tmp9 $tmp15 	%argrw{"wrr"}
+	mul		$tmp17 ___347_i ___347_i 	%argrw{"wrr"}
+	add		$tmp18 ___345_c $const11 	%argrw{"wrr"}
+	aref		$tmp19 ps $tmp18 	%argrw{"wrr"}
+	mul		$tmp20 $tmp17 $tmp19 	%argrw{"wrr"}
+	add		___348_bezierU $tmp16 $tmp20 	%argrw{"wrr"}
+# scratchShader.osl:41
+#         float bezierV = (1.0 - i) * (1.0 - i) * ps[c+1] + 2.0 * (1.0 - i) * i * ps[c+3] + i * i * ps[c+5];
+	sub		$tmp21 $const8 ___347_i 	%line{41} %argrw{"wrr"}
+	sub		$tmp22 $const8 ___347_i 	%argrw{"wrr"}
+	mul		$tmp23 $tmp21 $tmp22 	%argrw{"wrr"}
+	add		$tmp24 ___345_c $const4 	%argrw{"wrr"}
+	aref		$tmp25 ps $tmp24 	%argrw{"wrr"}
+	mul		$tmp26 $tmp23 $tmp25 	%argrw{"wrr"}
+	sub		$tmp27 $const8 ___347_i 	%argrw{"wrr"}
+	mul		$tmp28 $const9 $tmp27 	%argrw{"wrr"}
+	mul		$tmp29 $tmp28 ___347_i 	%argrw{"wrr"}
+	add		$tmp30 ___345_c $const12 	%argrw{"wrr"}
+	aref		$tmp31 ps $tmp30 	%argrw{"wrr"}
+	mul		$tmp32 $tmp29 $tmp31 	%argrw{"wrr"}
+	add		$tmp33 $tmp26 $tmp32 	%argrw{"wrr"}
+	mul		$tmp34 ___347_i ___347_i 	%argrw{"wrr"}
+	add		$tmp35 ___345_c $const13 	%argrw{"wrr"}
+	aref		$tmp36 ps $tmp35 	%argrw{"wrr"}
+	mul		$tmp37 $tmp34 $tmp36 	%argrw{"wrr"}
+	add		___348_bezierV $tmp33 $tmp37 	%argrw{"wrr"}
+# scratchShader.osl:42
+#         float diffU = P.x - bezierU;
+	compref		$tmp38 P $const6 	%line{42} %argrw{"wrr"}
+	sub		___348_diffU $tmp38 ___348_bezierU 	%argrw{"wrr"}
+# scratchShader.osl:43
+#         float diffV = P.y - bezierV;
+	compref		$tmp39 P $const4 	%line{43} %argrw{"wrr"}
+	sub		___348_diffV $tmp39 ___348_bezierV 	%argrw{"wrr"}
+# scratchShader.osl:48
+#         float newDist = hypot(diffU, diffV);
+	functioncall	$const14 57 	%line{48} %argrw{"r"}
+# /opt/pixar/RenderManProServer-26.2/lib/osl/include/stdosl.h:101
+# float hypot (float a, float b) { return sqrt (a*a + b*b); }
+	mul		$tmp40 ___348_diffU ___348_diffU 	%filename{"/opt/pixar/RenderManProServer-26.2/lib/osl/include/stdosl.h"} %line{101} %argrw{"wrr"}
+	mul		$tmp41 ___348_diffV ___348_diffV 	%argrw{"wrr"}
+	add		$tmp42 $tmp40 $tmp41 	%argrw{"wrr"}
+	sqrt		___348_newDist $tmp42 	%argrw{"wr"}
+# scratchShader.osl:50
+#         if(newDist < dist)
+	lt		$tmp43 ___348_newDist dist 	%filename{"scratchShader.osl"} %line{50} %argrw{"wrr"}
+	if		$tmp43 60 60 	%argrw{"r"}
+# scratchShader.osl:52
+#             dist = newDist;
+	assign		dist ___348_newDist 	%line{52} %argrw{"wr"}
+# scratchShader.osl:39
+#     for (float i = 0;  i < 1;  i += 0.001) {
+	add		___347_i ___347_i $const15 	%line{39} %argrw{"wrr"}
+# scratchShader.osl:57
+#     if (dist < thickness)
+	lt		$tmp44 dist thickness 	%line{57} %argrw{"wrr"}
+	if		$tmp44 65 65 	%argrw{"r"}
+# scratchShader.osl:60
+#         resultRGB=color(0.1,0.1,0.1);
+	assign		resultRGB $const16 	%line{60} %argrw{"wr"}
+# scratchShader.osl:61
+#         resultA=1.0;
+	assign		resultA $const8 	%line{61} %argrw{"wr"}
+# scratchShader.osl:37
+# for(int c=0; c<120; c+=6)
+	add		___345_c ___345_c $const17 	%line{37} %argrw{"wrr"}
+	end

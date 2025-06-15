@@ -1,0 +1,103 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.13.0.@PROJECT_VERSION_TWEAK@"dev"
+# options: 
+shader noiseMask
+param	int	bin	0		%read{23,23} %write{2147483647,-1}
+param	float	cut	0.5		%read{24,24} %write{2147483647,-1}
+param	float	frequency	3		%read{0,0} %write{2147483647,-1}
+param	float	lowClamp	0		%read{13,17} %write{2147483647,-1}
+param	float	highClamp	1		%read{13,13} %write{2147483647,-1}
+param	float	seed	6		%read{1,1} %write{2147483647,-1}
+oparam	color	resultRGB	0 0 0		%read{2147483647,-1} %write{21,28}
+oparam	float	resultR	0		%read{2147483647,-1} %write{22,29}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	float	n	%read{3,3} %write{1,1}
+local	float	rmp	%read{9,9} %write{8,8}
+local	float	flip	%read{12,12} %write{10,10}
+local	float	upperMap	%read{19,24} %write{17,17}
+local	float	F	%read{21,22} %write{20,20}
+temp	point	$tmp1	%read{1,1} %write{0,0}
+const	float	$const2	-1		%read{3,6} %write{2147483647,-1}
+const	float	$const4	1		%read{4,27} %write{2147483647,-1}
+const	float	$const6	0		%read{4,29} %write{2147483647,-1}
+const	string	$const7	"remap"		%read{2,11} %write{2147483647,-1}
+temp	float	$tmp2	%read{5,5} %write{3,3}
+temp	float	$tmp3	%read{5,5} %write{4,4}
+temp	float	$tmp4	%read{7,7} %write{5,5}
+temp	float	$tmp5	%read{7,7} %write{6,6}
+temp	float	$tmp6	%read{8,8} %write{7,7}
+temp	float	$tmp7	%read{10,10} %write{9,9}
+temp	float	$tmp8	%read{14,14} %write{12,12}
+temp	float	$tmp9	%read{14,14} %write{13,13}
+temp	float	$tmp10	%read{16,16} %write{14,14}
+temp	float	$tmp11	%read{16,16} %write{15,15}
+temp	float	$tmp12	%read{17,17} %write{16,16}
+const	string	$const8	"clamp"		%read{18,18} %write{2147483647,-1}
+temp	float	$tmp13	%read{20,20} %write{19,19}
+temp	int	$tmp14	%read{25,25} %write{24,24}
+const	color	$const9	1 1 1		%read{26,26} %write{2147483647,-1}
+const	color	$const10	0 0 0		%read{28,28} %write{2147483647,-1}
+code ___main___
+# noiseMask.osl:25
+# float n = noise(P*frequency, seed);
+	mul		$tmp1 P frequency 	%filename{"noiseMask.osl"} %line{25} %argrw{"wrr"}
+	noise		n $tmp1 seed 	%argrw{"wrr"}
+# noiseMask.osl:29
+# float rmp = remap(n,-1,1,0,1);
+	functioncall	$const7 9 	%line{29} %argrw{"r"}
+# noiseMask.osl:6
+#     return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
+	sub		$tmp2 n $const2 	%line{6} %argrw{"wrr"}
+	sub		$tmp3 $const4 $const6 	%argrw{"wrr"}
+	mul		$tmp4 $tmp2 $tmp3 	%argrw{"wrr"}
+	sub		$tmp5 $const4 $const2 	%argrw{"wrr"}
+	div		$tmp6 $tmp4 $tmp5 	%argrw{"wrr"}
+	add		rmp $const6 $tmp6 	%argrw{"wrr"}
+# noiseMask.osl:33
+# float flip = abs(rmp - 1);
+	sub		$tmp7 rmp $const4 	%line{33} %argrw{"wrr"}
+	abs		flip $tmp7 	%argrw{"wr"}
+# noiseMask.osl:36
+# float upperMap = remap(flip, 0, 1, lowClamp, highClamp);
+	functioncall	$const7 18 	%line{36} %argrw{"r"}
+# noiseMask.osl:6
+#     return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
+	sub		$tmp8 flip $const6 	%line{6} %argrw{"wrr"}
+	sub		$tmp9 highClamp lowClamp 	%argrw{"wrr"}
+	mul		$tmp10 $tmp8 $tmp9 	%argrw{"wrr"}
+	sub		$tmp11 $const4 $const6 	%argrw{"wrr"}
+	div		$tmp12 $tmp10 $tmp11 	%argrw{"wrr"}
+	add		upperMap lowClamp $tmp12 	%argrw{"wrr"}
+# noiseMask.osl:41
+# float F = clamp(upperMap, 0, 1);
+	functioncall	$const8 21 	%line{41} %argrw{"r"}
+# /opt/pixar/RenderManProServer-26.2/lib/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp13 upperMap $const4 	%filename{"/opt/pixar/RenderManProServer-26.2/lib/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		F $tmp13 $const6 	%argrw{"wrr"}
+# noiseMask.osl:43
+# resultRGB=color(F, F, F);
+	color		resultRGB F F F 	%filename{"noiseMask.osl"} %line{43} %argrw{"wrrr"}
+# noiseMask.osl:44
+# resultR=F;
+	assign		resultR F 	%line{44} %argrw{"wr"}
+# noiseMask.osl:46
+# if(bin)
+	if		bin 30 30 	%line{46} %argrw{"r"}
+# noiseMask.osl:48
+#     if(upperMap > cut)
+	gt		$tmp14 upperMap cut 	%line{48} %argrw{"wrr"}
+	if		$tmp14 28 30 	%argrw{"r"}
+# noiseMask.osl:50
+#         resultRGB=color(1.0,1.0,1.0);
+	assign		resultRGB $const9 	%line{50} %argrw{"wr"}
+# noiseMask.osl:51
+#         resultR=1.0;
+	assign		resultR $const4 	%line{51} %argrw{"wr"}
+# noiseMask.osl:55
+#         resultRGB=color(0.0,0.0,0.0);
+	assign		resultRGB $const10 	%line{55} %argrw{"wr"}
+# noiseMask.osl:56
+#         resultR=0.0;
+	assign		resultR $const6 	%line{56} %argrw{"wr"}
+	end

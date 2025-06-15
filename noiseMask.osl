@@ -1,0 +1,62 @@
+
+float remap(float value, float low1, float high1, float low2, float high2)
+{
+    // low2 + (value - low1) * (high2 - low2) / (high1 - low1)
+
+    return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
+}
+
+
+
+shader noiseMask(
+    int bin = 0, 
+    float cut = 0.5,
+    float frequency = 3.0, 
+    float lowClamp = 0.0, 
+    float highClamp = 1.0, 
+    float seed=6.0, 
+    output color resultRGB=0, 
+    output float resultR=0
+)
+{
+// Remap values
+// https://stackoverflow.com/questions/3451553/value-remapping
+
+float n = noise(P*frequency, seed);
+
+
+
+float rmp = remap(n,-1,1,0,1);
+
+
+
+float flip = abs(rmp - 1);
+
+//float removeLower = clamp(flip, lowClamp, highClamp);
+float upperMap = remap(flip, 0, 1, lowClamp, highClamp);
+
+//float nc = clamp(n, -1,1);
+//float FpN = nc;
+
+float F = clamp(upperMap, 0, 1);
+
+resultRGB=color(F, F, F);
+resultR=F;
+
+if(bin)
+{
+    if(upperMap > cut)
+    {
+        resultRGB=color(1.0,1.0,1.0);
+        resultR=1.0;
+    }
+    else
+    {
+        resultRGB=color(0.0,0.0,0.0);
+        resultR=0.0;
+    }
+}
+
+}
+
+
